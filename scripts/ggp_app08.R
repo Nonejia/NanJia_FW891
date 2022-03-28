@@ -4,6 +4,7 @@ rm(list=ls());                         # clear Environment tab
 options(show.error.locations = TRUE);  # show line numbers on error
 library(package=ggplot2);              # get the GGPlot package
 library(package=ggforce);              # for geom_circle, geom_ellipse
+library(package="gridExtra");
 
 #### Two bugs in GGPlot that cause issues with including data and mapping:
 #    1) faceting data must come from a declared data frame
@@ -20,16 +21,20 @@ seasonOrdered = factor(weatherData$season,
                        levels=c("Spring", "Summer", "Fall", "Winter"));
 hazyDays = grep(weatherData$weatherType, pattern= "HZ");   # any day with hazy
 
+mean1 = round(mean(weatherData[hazyDays,]$tempDept),digits = 2)
+
 plot1 = ggplot(data=weatherData[hazyDays,]) +
-  geom_histogram(mapping=aes(x=tempDept,fill="brown1"),color="black") +
+  geom_histogram(mapping=aes(x=tempDept),
+                 fill="brown1",
+                 color="black") +
   theme_classic() +
 
   annotate(geom = "text",
-           x = 5.1,
+           x = -1,
            y = 9,
-           label = "2.39\U00BA F",
+           label = mean1,
            color = "brown1")+
-  geom_vline(xintercept = mean(weatherData$tempDept), color = "brown1")+
+  geom_vline(xintercept = mean1, color = "brown1")+
   labs(title = "Temp Departure from Average (Hazy Days)",
        subtitle = "Lansing, Michigan: 2016",
        x = "Temp Dept",
@@ -43,16 +48,20 @@ breezyDays = grep(weatherData$weatherType, pattern="BR");  # any breezy day
 
 sunnyDays = grep(weatherData$weatherType, pattern="SN");   #any sunny day
 
+mean2 = round(mean(weatherData[breezyDays,]$tempDept),digits = 2)
+
 plot2 = ggplot(data=weatherData[breezyDays,]) +
-  geom_histogram(mapping=aes(x=tempDept,fill="brown1"),color="black") +
+  geom_histogram(mapping=aes(x=tempDept),
+                 fill="brown1",
+                 color="black") +
   theme_classic() +
   
   annotate(geom = "text",
            x = 5.1,
            y = 14,
-           label = "2.39\U00BA F",
+           label = mean2,
            color = "brown1")+
-  geom_vline(xintercept = mean(weatherData$tempDept), color = "brown1")+
+  geom_vline(xintercept = mean2, color = "brown1")+
   labs(title = "Temp Departure from Average (Breezy Days)",
        subtitle = "Lansing, Michigan: 2016",
        x = "Temp Dept",
@@ -60,16 +69,19 @@ plot2 = ggplot(data=weatherData[breezyDays,]) +
 
 plot(plot2);
 
+mean3 = round(mean(weatherData[sunnyDays,]$tempDept),digits = 2)
 plot3 = ggplot(data=weatherData[sunnyDays,]) +
-  geom_histogram(mapping=aes(x=tempDept,fill="brown1"),color="black") +
+  geom_histogram(mapping=aes(x=tempDept),
+                 fill="brown1",
+                 color="black") +
   theme_classic() +
   
   annotate(geom = "text",
-           x = 5.1,
+           x = -2.3,
            y = 9,
-           label = "2.39\U00BA F",
+           label = mean3,
            color = "brown1")+
-  geom_vline(xintercept = mean(weatherData$tempDept), color = "brown1")+
+  geom_vline(xintercept = mean3, color = "brown1")+
   labs(title = "Temp Departure from Average (Sunny Days)",
        subtitle = "Lansing, Michigan: 2016",
        x = "Temp Dept",
