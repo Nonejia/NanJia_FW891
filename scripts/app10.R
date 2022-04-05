@@ -176,21 +176,26 @@
                   fill = "yellow",
                   nudge_x = 10) + 
     coord_sf(crs = 26914,   
-             xlim = c(500000, 2500000), 
-             ylim = c(450000, 7000000),
+             xlim = c(1000000, 2500000), 
+             ylim = c(4500000, 6000000),
              expand = TRUE);
   plot(plot5)
   
   # Q6
 
+  world = ne_countries(returnclass = "sf")
   china = st_read(dsn = "data/china/China.shp");
   china_SF = st_as_sf(china);
-  
+
   plot6 = ggplot()+
+    geom_sf(data = world,
+            mapping = aes(geometry = geometry),
+            color = "black",
+            fill = "pink") +
     geom_sf(data = china_SF,
             mapping = aes(geometry = geometry),
-            color = "cornflowerblue",
-            fill = "cornflowerblue")+
+            color = "lightyellow",
+            fill = "lightyellow")+
     coord_sf(crs = 4326,    
              xlim = c(73, 135),  # in degrees...
              ylim = c(4, 54),
